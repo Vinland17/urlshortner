@@ -1,45 +1,54 @@
 # 🔗 URL Shortener
 
-A simple and elegant full-stack URL shortener built with **Spring Boot**, **MongoDB**, **HTML**, **CSS (Tailwind)**, and **JavaScript**.
-
-## 🌐 Demo Preview
-
-Here's how it looks in action:
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Vinland17/urlshortner/main/demo-screenshot.png" alt="Demo UI" width="600"/>
-</p>
-
-> ✨ Want it interactive? Add a screen recording (GIF) using [LICEcap](https://www.cockos.com/licecap/) or [screenity](https://chrome.google.com/webstore/detail/screenity-screen-recording/mpbalgmimhnnpooobkgkkkefnbdempop).
+A beginner-friendly full-stack project to **shorten long URLs** into neat, shareable links. Built with **Spring Boot**, **MongoDB**, and a beautiful **HTML/CSS/JavaScript frontend**, this project includes essential backend logic and redirect handling.
 
 ---
 
-## 🚀 Features
+## 🔑 Features
 
-- Paste a long URL and instantly get a shortened link
-- Automatically copy or visit the shortened URL
-- Real-time redirect handling
-- Tracks number of times the short URL is accessed
-- Clean and responsive UI using TailwindCSS
-- Backend powered by Spring Boot and MongoDB
+- **Shorten Long URLs**  
+  Convert lengthy URLs into short, unique codes.
 
----
+- **Redirect Support**  
+  Redirects users to the original long URL when a short code is visited.
 
-## 🧪 Tech Stack
+- **Basic CRUD Support**  
+  Update and delete existing short URLs.
 
-| Layer      | Tech Used                        |
-|------------|----------------------------------|
-| Frontend   | HTML, CSS (Tailwind), JavaScript |
-| Backend    | Java + Spring Boot               |
-| Database   | MongoDB                          |
-| Build Tool | Maven                            |
+- **MongoDB Persistence**  
+  All short links and metadata are stored securely.
+
+- **Clean Frontend Interface**  
+  Tailwind CSS-powered responsive UI with smooth animations.
 
 ---
 
-## 📦 Setup Instructions
+## ⚙️ Tech Stack
 
-### 1. Clone the Repo
+- **Java 17+**, **Spring Boot**
+- **Spring Web**, **Spring Data MongoDB**
+- **MongoDB**
+- **Tailwind CSS**, **JavaScript**, **HTML**
+- **Maven** for dependency management
 
-```bash
-git clone https://github.com/Vinland17/urlshortner.git
-cd urlshortner
+---
+
+## 🚀 Getting Started
+
+### ✅ Prerequisites
+
+- Java 17+
+- MongoDB (local or Atlas)
+- Maven
+- Git
+- IDE (IntelliJ recommended)
+
+---
+
+### 🛠️ Setup Instructions
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/Vinland17/urlshortner.git
+   cd urlshortner
