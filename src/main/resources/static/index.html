@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Shortener - By Vineet M</title>
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .title {
+        color: #333;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .subtitle {
+        color: #666;
+        font-size: 1.1em;
+        margin-bottom: 30px;
+    }
+
+    .input-group {
+        margin-bottom: 25px;
+    }
+
+    .url-input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 50px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        outline: none;
+    }
+
+    .url-input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .shorten-btn {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .shorten-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .shorten-btn:active {
+        transform: translateY(0);
+    }
+
+    .shorten-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .result {
+        margin-top: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        border-left: 4px solid #667eea;
+        display: none;
+    }
+
+    .result.show {
+        display: block;
+        animation: slideIn 0.3s ease;
+    }
+
+    .result.error {
+        background: #ffeaea;
+        border-left-color: #ff4757;
+    }
+
+    .short-url {
+        font-size: 18px;
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        word-break: break-all;
+        transition: color 0.3s ease;
+    }
+
+    .short-url:hover {
+        color: #764ba2;
+        text-decoration: underline;
+    }
+
+    .copy-btn {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .copy-btn:hover {
+        background: #218838;
+        transform: translateY(-1px);
+    }
+
+    .loading {
+        display: none;
+        margin-top: 20px;
+    }
+
+    .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #667eea;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .features {
+        margin-top: 40px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+    }
+
+    .feature {
+        text-align: center;
+        padding: 20px;
+        background: rgba(102, 126, 234, 0.1);
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+    }
+
+    .feature:hover {
+        transform: translateY(-5px);
+    }
+
+    .feature-icon {
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+
+    .feature-text {
+        color: #555;
+        font-size: 14px;
+    }
+
+    .footer {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .credits {
+        margin-top: 10px;
+        font-style: italic;
+    }
+
+    .tech-stack {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .tech-tag {
+        background: #667eea;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 20px;
+        }
+
+        .title {
+            font-size: 2em;
+        }
+
+        .features {
+            grid-template-columns: 1fr;
+        }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 class="title">🔗 URL Shortener</h1>
+  <p class="subtitle">Transform long URLs into short, shareable links instantly</p>
+
+  <div class="input-group">
+    <input type="url" id="urlInput" class="url-input" placeholder="Enter your long URL here (e.g., https://example.com/very-long-url)" />
+  </div>
+
+  <button id="shortenBtn" class="shorten-btn">Shorten URL</button>
+
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+  </div>
+
+  <div id="result" class="result">
+    <div id="resultContent"></div>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-text">Lightning Fast</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-text">Secure & Reliable</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📱</div>
+      <div class="feature-text">Mobile Friendly</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📊</div>
+      <div class="feature-text">Click Tracking</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="credits">
+      <strong>Created with ❤️ by Vineet M</strong>
+    </div>
+    <div class="tech-stack">
+      <span class="tech-tag">Spring Boot</span>
+      <span class="tech-tag">MongoDB</span>
+      <span class="tech-tag">HTML5</span>
+      <span class="tech-tag">CSS3</span>
+      <span class="tech-tag">JavaScript</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const urlInput = document.getElementById('urlInput');
+  const shortenBtn = document.getElementById('shortenBtn');
+  const loading = document.getElementById('loading');
+  const result = document.getElementById('result');
+  const resultContent = document.getElementById('resultContent');
+
+  shortenBtn.addEventListener('click', shortenUrl);
+  urlInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+          shortenUrl();
+      }
+  });
+
+  async function shortenUrl() {
+      const url = urlInput.value.trim();
+
+      if (!url) {
+          showError('Please enter a URL');
+          return;
+      }
+
+      if (!isValidUrl(url)) {
+          showError('Please enter a valid URL (e.g., https://example.com)');
+          return;
+      }
+
+      setLoading(true);
+      hideResult();
+
+      try {
+          const response = await fetch('/api/shorten', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ url: url })
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+              showSuccess(data.shortUrl, data.originalUrl);
+          } else {
+              showError(data.error || 'An error occurred');
+          }
+      } catch (error) {
+          showError('Network error. Please try again.');
+      } finally {
+          setLoading(false);
+      }
+  }
+
+  function isValidUrl(string) {
+      try {
+          const url = new URL(string.startsWith('http') ? string : 'https://' + string);
+          return url.protocol === 'http:' || url.protocol === 'https:';
+      } catch (_) {
+          return false;
+      }
+  }
+
+  function setLoading(isLoading) {
+      loading.style.display = isLoading ? 'block' : 'none';
+      shortenBtn.disabled = isLoading;
+      shortenBtn.textContent = isLoading ? 'Shortening...' : 'Shorten URL';
+  }
+
+  function showSuccess(shortUrl, originalUrl) {
+      result.className = 'result show';
+      resultContent.innerHTML = `
+          <div style="margin-bottom: 15px;">
+              <strong>✅ URL shortened successfully!</strong>
+          </div>
+          <div style="margin-bottom: 10px;">
+              <strong>Original:</strong> <span style="color: #666; word-break: break-all;">${originalUrl}</span>
+          </div>
+          <div style="margin-bottom: 15px;">
+              <strong>Short URL:</strong>
+              <a href="${shortUrl}" target="_blank" class="short-url" id="shortUrl">${shortUrl}</a>
+              <button class="copy-btn" onclick="copyToClipboard('${shortUrl}')">📋 Copy</button>
+          </div>
+          <div style="font-size: 14px; color: #666;">
+              Click the link above to test it or copy it to share!
+          </div>
+      `;
+  }
+
+  function showError(message) {
+      result.className = 'result show error';
+      resultContent.innerHTML = `
+          <div style="color: #d32f2f;">
+              <strong>❌ Error:</strong> ${message}
+          </div>
+      `;
+  }
+
+  function hideResult() {
+      result.className = 'result';
+  }
+
+  function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(function() {
+          // Change button text temporarily
+          const copyBtn = event.target;
+          const originalText = copyBtn.textContent;
+          copyBtn.textContent = '✅ Copied!';
+          copyBtn.style.background = '#28a745';
+
+          setTimeout(() => {
+              copyBtn.textContent = originalText;
+              copyBtn.style.background = '#28a745';
+          }, 2000);
+      }).catch(function(err) {
+          console.error('Could not copy text: ', err);
+          alert('Failed to copy to clipboard');
+      });
+  }
+
+  // Add some entrance animation
+  window.addEventListener('load', function() {
+      document.querySelector('.container').style.animation = 'slideIn 0.6s ease';
+  });
+</script>
+</body>
+</html>
